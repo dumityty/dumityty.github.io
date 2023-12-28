@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center; /* Center the text within the body */
+        }
+
+        h2 {
+            text-align: center; /* Center the text within the h2 element */
+        }
+
+        p {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Trading Calculator</h2>
+
+    <h3>Trade value risk</h3>
+
+    <p>This simple calculator allows you to calculate how much you need to trade in order to 'risk' a certain amount of money per trade, based on the distance to the invalidation/stop loss and the leverage used.</p>
+
+    <br>
+
+    <form id="tradeForm" onsubmit="event.preventDefault(); calculateTradeValue();">
+        <label for="riskValue">Risk Value ($):</label>
+        <input type="number" step="any" id="riskValue" value="100" required>
+
+        <label for="invalidationValue">Invalidation (S/L) Value (%):</label>
+        <input type="number" step="any" id="invalidationValue" required>
+
+        <label for="leverageValue">Leverage Value:</label>
+        <input type="number" step="any" id="leverageValue" value="1" required>
+
+
+        <button type="submit">Calculate Trade Value</button>
+
+    </form>
+    
+    <br>
+
+    <b><p id="tradeResult"></p></b>
+
+    <br>
+
+    <h3>Percentage change</h3>
+
+    <p>This simple percentage calculator allows you to calculate the percentage increase or decrease between two values.<p>This is useful for calculating the Invalidation/Stop Loss % above if not already known.</p>
+    <p>Enter the original and new values below and click the "Calculate Percentage" button to see the result.</p>
+
+    <br>
+
+    <form id="percentageForm" onsubmit="event.preventDefault(); calculatePercentage();">
+        <label for="originalValue">Start price:</label>
+        <input type="number" step="any" id="originalValue" required>
+
+        <label for="newValue">End price:</label>
+        <input type="number" step="any" id="newValue" required>
+
+        <button type="submit">Calculate Percentage</button>
+
+        <p id="result"></p>
+    </form>
+    
+    <br>
+
+    <script>
+        function calculatePercentage() {
+            // Get input values
+            var originalValue = parseFloat(document.getElementById('originalValue').value);
+            var newValue = parseFloat(document.getElementById('newValue').value);
+
+            // Check if both values are valid numbers
+            if (isNaN(originalValue) || isNaN(newValue)) {
+                alert("Please enter valid numbers");
+                return;
+            }
+
+            // Calculate percentage change
+            var percentageChange = ((newValue - originalValue) / Math.abs(originalValue)) * 100;
+
+            // Display the result
+            var resultElement = document.getElementById('result');
+            resultElement.innerHTML = "Percentage Change: " + percentageChange.toFixed(2) + "%";
+        }
+
+        function calculateTradeValue() {
+            // Get input values
+            var riskValue = parseFloat(document.getElementById('riskValue').value);
+            var invalidationValue = parseFloat(document.getElementById('invalidationValue').value);
+            var leverageValue = parseFloat(document.getElementById('leverageValue').value);
+
+            // Check if both values are valid numbers
+            if (isNaN(riskValue) || isNaN(invalidationValue) || isNaN(leverageValue)) {
+                alert("Please enter valid numbers");
+                return;
+            }
+
+            // Calculate percentage change
+            var tradeValue = riskValue / (invalidationValue/100 * leverageValue);
+
+            // Display the result
+            var resultElement = document.getElementById('tradeResult');
+            resultElement.innerHTML = "Trade value: " + tradeValue.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
